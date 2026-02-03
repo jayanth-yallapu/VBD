@@ -1,38 +1,29 @@
 const Hero = () => {
   return (
-    <section className="bg-slate-100">
-      <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <section className="w-full bg-slate-900 text-white">
+      <div className="max-w-7xl mx-auto px-6 py-24 text-center">
         
-        {/* Left Content */}
-        <div>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
-            Building Trusted <span className="text-teal-500">Real Estate</span>{" "}
-            Opportunities
-          </h1>
+        {/* Heading */}
+        <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+          Building the Future with{" "}
+          <span className="text-teal-400">Innovation</span>
+        </h1>
 
-          <p className="mt-6 text-lg text-slate-600">
-            Premium residential, farm, and commercial plots in prime locations.
-            Clear documentation. Transparent pricing. Trusted service.
-          </p>
+        {/* Subtext */}
+        <p className="mt-6 text-slate-300 max-w-2xl mx-auto">
+          Vande Bharat Developers brings together ideas, technology, and
+          execution to create impactful ventures.
+        </p>
 
-          <div className="mt-8 flex gap-4">
-            <button className="bg-yellow-400 text-slate-900 px-6 py-3 rounded-md font-semibold hover:bg-yellow-300 transition">
-              View Ventures
-            </button>
-
-            <button className="border border-slate-900 text-slate-900 px-6 py-3 rounded-md font-semibold hover:bg-slate-900 hover:text-white transition">
-              Contact Sales
-            </button>
-          </div>
+        {/* Buttons */}
+        <div className="mt-10 flex justify-center gap-6">
+          <button className="bg-yellow-400 text-slate-900 px-6 py-3 rounded-md font-semibold hover:bg-yellow-300 transition">
+            Explore Ventures
+          </button>
+          <button className="border border-teal-400 text-teal-400 px-6 py-3 rounded-md font-semibold hover:bg-teal-400 hover:text-slate-900 transition">
+            Enquire Now
+          </button>
         </div>
-
-        {/* Right Visual Placeholder */}
-        <div className="hidden md:flex items-center justify-center">
-          <div className="w-full h-64 bg-slate-300 rounded-xl flex items-center justify-center text-slate-600">
-            Image / Illustration
-          </div>
-        </div>
-
       </div>
     </section>
   );
