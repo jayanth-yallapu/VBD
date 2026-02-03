@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { getVentures } from "../data/ventureStore";
+import { useState } from "react";
 
 const GOOGLE_FORM_URL =
-  "https://docs.google.com/forms/u/0/d/e/1FAIpQLSftqcEn8JsgHaz_u1N2xIYkHblHLwVXJ0oL60VzwR12zJy87w/formResponse"; // 🔴 replace
+  "https://docs.google.com/forms/u/0/d/e/1FAIpQLSftqcEn8JsgHaz_u1N2xIYkHblHLwVXJ0oL60VzwR12zJy87w/formResponse";
 
-const Enquiry = () => {
-  const [ventures, setVentures] = useState([]);
+const Enquiry = ({ ventures }) => {
   const [data, setData] = useState({
     name: "",
     phone: "",
@@ -14,26 +12,42 @@ const Enquiry = () => {
     facing: "",
   });
 
-  useEffect(() => {
-    setVentures(getVentures());
-  }, []);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  const availableVentures = ventures.filter(
+    v => v.status?.toLowerCase() === "available"
+  );
+
+  const selectedVenture = availableVentures.find(
+    v => v.name === data.venture
+  );
+
+  const sizes =
+  selectedVenture && typeof selectedVenture.sizes === "string"
+    ? selectedVenture.sizes.split(",").map(s => s.trim())
+    : [];
+
+
+  const handleChange = e => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const submit = async (e) => {
+  const isValid =
+    data.name &&
+    data.phone.length === 10 &&
+    data.venture &&
+    data.size &&
+    data.facing;
+
+  const submit = async e => {
     e.preventDefault();
+    if (!isValid || loading) return;
 
-    // Validation
-    if (Object.values(data).some(v => !v)) {
-      alert("Please fill all fields");
-      return;
-    }
+    setLoading(true);
 
-    // Send to Google Sheets
+    // Send to Google Sheets (via Google Form)
     const formBody = new URLSearchParams({
-      "entry.1284893688": data.name,    // 🔴 replace
+      "entry.1284893688": data.name,
       "entry.621228616": data.phone,
       "entry.937809861": data.venture,
       "entry.1899246880": data.size,
@@ -46,23 +60,21 @@ const Enquiry = () => {
       body: formBody,
     });
 
-    // WhatsApp message
-    const message = `
-Hello, I'm interested in a plot.
+    // WhatsApp message (clean + human)
+    const message = `Hi, I'm interested in the ${data.venture} venture.
+
+Preferred plot size: ${data.size}
+Facing preference: ${data.facing}
 
 Name: ${data.name}
-Phone: ${data.phone}
-Venture: ${data.venture}
-Plot Size: ${data.size}
-Facing: ${data.facing}
-    `;
+Phone: ${data.phone}`;
 
-    window.open(
-      `https://wa.me/919849675068?text=${encodeURIComponent(message)}`,
-      "_blank"
-    );
+    const whatsapp = selectedVenture?.whatsappNumber;
 
-    // Reset
+    window.location.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
+      message
+    )}`;
+
     setData({
       name: "",
       phone: "",
@@ -70,10 +82,12 @@ Facing: ${data.facing}
       size: "",
       facing: "",
     });
+
+    setLoading(false);
   };
 
   return (
-    <form onSubmit={submit} className="max-w-xl mx-auto space-y-4">
+    <form onSubmit={submit} className="max-w-xl mx-auto space-y-4 p-4">
       <input
         name="name"
         placeholder="Your Name"
@@ -86,6 +100,7 @@ Facing: ${data.facing}
         name="phone"
         placeholder="Phone Number"
         value={data.phone}
+        maxLength={10}
         onChange={handleChange}
         className="border p-3 w-full"
       />
@@ -97,8 +112,10 @@ Facing: ${data.facing}
         className="border p-3 w-full"
       >
         <option value="">Select Venture</option>
-        {ventures.map((v, i) => (
-          <option key={i}>{v}</option>
+        {availableVentures.map(v => (
+          <option key={v.id} value={v.name}>
+            {v.name}
+          </option>
         ))}
       </select>
 
@@ -106,12 +123,15 @@ Facing: ${data.facing}
         name="size"
         value={data.size}
         onChange={handleChange}
+        disabled={!sizes.length}
         className="border p-3 w-full"
       >
         <option value="">Plot Size</option>
-        <option>120 Sq Yards</option>
-        <option>240 Sq Yards</option>
-        <option>360 Sq Yards</option>
+        {sizes.map(s => (
+          <option key={s} value={s}>
+            {s}
+          </option>
+        ))}
       </select>
 
       <select
@@ -131,8 +151,11 @@ Facing: ${data.facing}
         <option>South-West</option>
       </select>
 
-      <button className="w-full bg-teal-500 text-white py-3 rounded">
-        Submit & WhatsApp
+      <button
+        disabled={!isValid || loading}
+        className="w-full bg-teal-500 text-white py-3 rounded disabled:opacity-50"
+      >
+        {loading ? "Submitting..." : "Submit & WhatsApp"}
       </button>
     </form>
   );
