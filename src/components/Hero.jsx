@@ -1,4 +1,8 @@
-const Hero = () => {
+const Hero = () => {const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
   return (
     <section className="w-full bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto px-6 py-24 text-center">
@@ -17,10 +21,10 @@ const Hero = () => {
 
         {/* Buttons */}
         <div className="mt-10 flex justify-center gap-6">
-          <button className="bg-yellow-400 text-slate-900 px-6 py-3 rounded-md font-semibold hover:bg-yellow-300 transition">
+          <button onClick={() => scrollTo("ventures")} className="bg-yellow-400 text-slate-900 px-6 py-3 rounded-md font-semibold hover:bg-yellow-300 transition">
             Explore Ventures
           </button>
-          <button className="border border-teal-400 text-teal-400 px-6 py-3 rounded-md font-semibold hover:bg-teal-400 hover:text-slate-900 transition">
+          <button onClick={() => scrollTo("enquiry")} className="border border-teal-400 text-teal-400 px-6 py-3 rounded-md font-semibold hover:bg-teal-400 hover:text-slate-900 transition">
             Enquire Now
           </button>
         </div>
