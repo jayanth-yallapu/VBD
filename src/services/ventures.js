@@ -1,23 +1,34 @@
-const SHEET_ID = "1JzBZmEmcaiwysYg4Yn6KJpMTWGB7vN-Jt4oQSz8ETB8";
-const SHEET_NAME = "Ventures";
-
-const GOOGLE_SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+const GOOGLE_SHEET_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSPuro902wiNimLuvEmK10w5So7bTXVLQOPEaVCWNX4nybNtzB9lqJhXIjOZQD-geCo5pApq_UH_wDM/pub?gid=777846124&single=true&output=csv";
 
 export const fetchVentures = async () => {
   const res = await fetch(GOOGLE_SHEET_CSV_URL);
   const text = await res.text();
 
-  const rows = text.split("\n").slice(1);
+  const rows = text.trim().split("\n");
+  rows.shift(); // remove header row
 
-  return rows.map(row => {
-    const [name, status, image] = row.split(",");
+  return rows.map((row) => {
+    const [
+      id,
+      name,
+      location,
+      sizes,
+      price,
+      status,
+      whatsappNumber,
+      image,
+    ] = row.split(",");
 
     return {
+      id: id?.trim(),
       name: name?.trim(),
+      location: location?.trim(),
+      sizes: sizes?.trim(),
+      price: price?.trim(),
       status: status?.trim(),
-      image: image?.trim(),
+      whatsappNumber: whatsappNumber?.trim(),
+      image: image?.trim(), // optional
     };
   });
 };
-
-

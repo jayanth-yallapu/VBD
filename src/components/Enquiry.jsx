@@ -1,9 +1,11 @@
 import { useState } from "react";
 
+const PLOT_SIZES = [120, 240, 360, 480];
+
 const GOOGLE_FORM_URL =
   "https://docs.google.com/forms/u/0/d/e/1FAIpQLSftqcEn8JsgHaz_u1N2xIYkHblHLwVXJ0oL60VzwR12zJy87w/formResponse";
 
-const Enquiry = ({ ventures }) => {
+const Enquiry = ({ ventures = [] }) => {
   const [data, setData] = useState({
     name: "",
     phone: "",
@@ -12,55 +14,61 @@ const Enquiry = ({ ventures }) => {
     facing: "",
   });
 
+const selectedVenture = ventures.find(
+  (v) => v.name === data.venture
+);
+
+
   const [loading, setLoading] = useState(false);
 
+  // ✅ SAFE filtering
   const availableVentures = ventures.filter(
-    v => v.status?.toLowerCase() === "available"
+    (v) => v.status?.trim().toLowerCase() === "available"
   );
 
-  const selectedVenture = availableVentures.find(
-    v => v.name === data.venture
-  );
-
-  const sizes =
-  selectedVenture && typeof selectedVenture.sizes === "string"
-    ? selectedVenture.sizes.split(",").map(s => s.trim())
-    : [];
+  
 
 
-  const handleChange = e => {
-    setData({ ...data, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // phone: digits only
+    if (name === "phone" && !/^\d*$/.test(value)) return;
+
+    setData({ ...data, [name]: value });
   };
 
   const isValid =
-    data.name &&
+    data.name.trim() &&
     data.phone.length === 10 &&
     data.venture &&
     data.size &&
     data.facing;
 
-  const submit = async e => {
+  const submit = async (e) => {
     e.preventDefault();
     if (!isValid || loading) return;
 
     setLoading(true);
 
-    // Send to Google Sheets (via Google Form)
-    const formBody = new URLSearchParams({
-      "entry.1284893688": data.name,
-      "entry.621228616": data.phone,
-      "entry.937809861": data.venture,
-      "entry.1899246880": data.size,
-      "entry.1895423107": data.facing,
-    });
+    try {
+      const formBody = new URLSearchParams({
+        "entry.1284893688": data.name,
+        "entry.621228616": data.phone,
+        "entry.937809861": data.venture,
+        "entry.1899246880": data.size,
+        "entry.1895423107": data.facing,
+      });
 
-    await fetch(GOOGLE_FORM_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: formBody,
-    });
+      await fetch(GOOGLE_FORM_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: formBody,
+      });
+    } catch {
+      console.warn("Form submit failed, continuing to WhatsApp");
+    }
 
-    // WhatsApp message (clean + human)
     const message = `Hi, I'm interested in the ${data.venture} venture.
 
 Preferred plot size: ${data.size}
@@ -71,9 +79,11 @@ Phone: ${data.phone}`;
 
     const whatsapp = selectedVenture?.whatsappNumber;
 
-    window.location.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
-      message
-    )}`;
+    if (whatsapp) {
+      window.location.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
+        message
+      )}`;
+    }
 
     setData({
       name: "",
@@ -85,7 +95,7 @@ Phone: ${data.phone}`;
 
     setLoading(false);
   };
-
+console.log(ventures)
   return (
     <form onSubmit={submit} className="max-w-xl mx-auto space-y-4 p-4">
       <input
@@ -101,6 +111,7 @@ Phone: ${data.phone}`;
         placeholder="Phone Number"
         value={data.phone}
         maxLength={10}
+        inputMode="numeric"
         onChange={handleChange}
         className="border p-3 w-full"
       />
@@ -112,7 +123,7 @@ Phone: ${data.phone}`;
         className="border p-3 w-full"
       >
         <option value="">Select Venture</option>
-        {availableVentures.map(v => (
+        {availableVentures.map((v) => (
           <option key={v.id} value={v.name}>
             {v.name}
           </option>
@@ -120,19 +131,20 @@ Phone: ${data.phone}`;
       </select>
 
       <select
-        name="size"
-        value={data.size}
-        onChange={handleChange}
-        disabled={!sizes.length}
-        className="border p-3 w-full"
-      >
-        <option value="">Plot Size</option>
-        {sizes.map(s => (
-          <option key={s} value={s}>
-            {s}
-          </option>
-        ))}
-      </select>
+  name="size"
+  value={data.size}
+  onChange={handleChange}
+  disabled={!data.venture}
+  className="border p-3 w-full"
+>
+  <option value="">Plot Size</option>
+  {PLOT_SIZES.map((s) => (
+    <option key={s} value={s}>
+      {s} Sq Yards
+    </option>
+  ))}
+</select>
+
 
       <select
         name="facing"
