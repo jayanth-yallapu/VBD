@@ -6,7 +6,7 @@ export const fetchVentures = async () => {
   const text = await res.text();
 
   const rows = text.trim().split("\n");
-  rows.shift(); // remove header row
+  rows.shift(); 
 
   return rows.map((row) => {
     const [
@@ -18,6 +18,9 @@ export const fetchVentures = async () => {
       status,
       whatsappNumber,
       image,
+      highlight1,
+      highlight2,
+      highlight3,
     ] = row.split(",");
 
     return {
@@ -28,7 +31,14 @@ export const fetchVentures = async () => {
       price: price?.trim(),
       status: status?.trim(),
       whatsappNumber: whatsappNumber?.trim(),
-      image: image?.trim(), // optional
+      image: image?.trim(),
+
+      // 🔥 THIS is the magic
+      highlights: [
+        highlight1?.trim(),
+        highlight2?.trim(),
+        highlight3?.trim(),
+      ].filter(Boolean),
     };
   });
 };
