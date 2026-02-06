@@ -3,7 +3,7 @@ import Hero from "../components/Hero";
 import Enquiry from "../components/Enquiry";
 import Ventures from "../components/Ventures";
 import { fetchVentures } from "../services/ventures";
-
+import Footer from "../components/Footer";
 const Home = () => {
   const [ventures, setVentures] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,55 +37,61 @@ const Home = () => {
       </div>
 
       {/* 🔥 HIGHLIGHTS */}
-      <section className="w-full bg-slate-900">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <h2 className="text-3xl font-bold text-center mb-12 text-white">
-            Why Choose <span className="text-teal-400">Us</span>
-          </h2>
+<section className="w-full bg-slate-900">
+  <div className="max-w-7xl mx-auto px-6 py-16">
+    <h2 className="text-3xl font-bold text-center mb-12 text-white">
+      Why Choose <span className="text-teal-400">Us</span>
+    </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-xl bg-slate-800 border border-slate-700
-                            hover:border-teal-400 hover:shadow-lg hover:shadow-teal-400/10 transition">
-              <h3 className="text-xl font-semibold mb-2 text-teal-400">
-                Trusted Ventures
-              </h3>
-              <p className="text-slate-300 text-sm">
-                Carefully curated ventures with proven track records.
-              </p>
-            </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      {/* Card 1 */}
+      <div className="p-6 rounded-xl bg-slate-800 border border-slate-700
+                      hover:border-teal-400 hover:shadow-lg hover:shadow-teal-400/10 transition">
+        <h3 className="text-xl font-semibold mb-2 text-teal-400">
+          Trusted Ventures
+        </h3>
+        <p className="text-slate-300 text-sm">
+          Well-planned residential ventures with a strong reputation and satisfied customers.
+        </p>
+      </div>
 
-            <div className="p-6 rounded-xl bg-slate-800 border border-slate-700
-                            hover:border-yellow-400 hover:shadow-lg hover:shadow-yellow-400/10 transition">
-              <h3 className="text-xl font-semibold mb-2 text-yellow-400">
-                Easy Enquiry
-              </h3>
-              <p className="text-slate-300 text-sm">
-                Submit enquiries instantly and get quick responses.
-              </p>
-            </div>
+      {/* Card 2 */}
+      <div className="p-6 rounded-xl bg-slate-800 border border-slate-700
+                      hover:border-yellow-400 hover:shadow-lg hover:shadow-yellow-400/10 transition">
+        <h3 className="text-xl font-semibold mb-2 text-yellow-400">
+          SBI Loan Approved
+        </h3>
+        <p className="text-slate-300 text-sm">
+          Our ventures are approved by leading banks, making home loans easy and secure.
+        </p>
+      </div>
 
-            <div className="p-6 rounded-xl bg-slate-800 border border-slate-700
-                            hover:border-teal-400 hover:shadow-lg hover:shadow-teal-400/10 transition">
-              <h3 className="text-xl font-semibold mb-2 text-teal-400">
-                Verified Data
-              </h3>
-              <p className="text-slate-300 text-sm">
-                All venture details are managed directly from live sheets.
-              </p>
-            </div>
+      {/* Card 3 */}
+      <div className="p-6 rounded-xl bg-slate-800 border border-slate-700
+                      hover:border-teal-400 hover:shadow-lg hover:shadow-teal-400/10 transition">
+        <h3 className="text-xl font-semibold mb-2 text-teal-400">
+          Clear Documentation
+        </h3>
+        <p className="text-slate-300 text-sm">
+          Transparent layouts, legal approvals, and complete documentation you can trust.
+        </p>
+      </div>
 
-            <div className="p-6 rounded-xl bg-slate-800 border border-slate-700
-                            hover:border-yellow-400 hover:shadow-lg hover:shadow-yellow-400/10 transition">
-              <h3 className="text-xl font-semibold mb-2 text-yellow-400">
-                Customer First
-              </h3>
-              <p className="text-slate-300 text-sm">
-                Designed to make your decision faster and easier.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Card 4 */}
+      <div className="p-6 rounded-xl bg-slate-800 border border-slate-700
+                      hover:border-yellow-400 hover:shadow-lg hover:shadow-yellow-400/10 transition">
+        <h3 className="text-xl font-semibold mb-2 text-yellow-400">
+          Customer First
+        </h3>
+        <p className="text-slate-300 text-sm">
+          We focus on long-term relationships, not just quick sales.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
 
       {/* 🏗️ VENTURES */}
       <div id="ventures">
@@ -101,6 +107,7 @@ const Home = () => {
           ventures={ventures}
           selectedVenture={selectedVenture}
         />
+        <Footer/>
       </div>
     </>
   );

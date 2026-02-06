@@ -14,14 +14,21 @@ const Navbar = () => {
     <nav className="w-full bg-slate-900 text-white fixed top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-        {/* Logo */}
         <div
-          onClick={() => scrollTo("home")}
-          className="text-xl font-bold tracking-wide cursor-pointer"
-        >
-          <span className="text-teal-400">Vande Bharat</span>{" "}
-          <span className="text-yellow-400">Developers</span>
-        </div>
+  onClick={() => scrollTo("home")}
+  className="flex items-center gap-3 cursor-pointer"
+>
+  <img
+    src="/icon.svg"
+    alt="Vande Bharat Developers Logo"
+    className="h-9 w-auto"
+  />
+
+  <div className="text-xl font-bold tracking-wide">
+    <span className="text-teal-400">Vande Bharat</span>{" "}
+    <span className="text-yellow-400">Developers</span>
+  </div>
+</div>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
