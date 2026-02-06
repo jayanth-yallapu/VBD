@@ -12,7 +12,7 @@ const Footer = () => {
         {/* Brand */}
         <div>
           <h3 className="text-lg font-semibold text-white mb-2">
-            Vande Bharath Developers
+            Vande Bharat Developers
           </h3>
           <p className="text-sm leading-relaxed">
             Developing well-planned residential ventures with a focus on trust,
@@ -60,7 +60,7 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="border-t border-slate-800 text-center py-4 text-xs">
-        © {new Date().getFullYear()} Vande Bharath Developers. All rights reserved.
+        © {new Date().getFullYear()} Vande Bharat Developers. All rights reserved.
       </div>
     </footer>
   );
