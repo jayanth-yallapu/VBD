@@ -6,9 +6,10 @@ export const fetchVentures = async () => {
   const text = await res.text();
 
   const rows = text.trim().split("\n");
-  rows.shift(); 
+  rows.shift(); // remove header row
 
   return rows.map((row) => {
+    // ⚠️ still CSV-based, so commas in cells will break (okay for now)
     const [
       id,
       name,
@@ -18,6 +19,8 @@ export const fetchVentures = async () => {
       status,
       whatsappNumber,
       image,
+      gallery,
+      layout,
       highlight1,
       highlight2,
       highlight3,
@@ -31,9 +34,22 @@ export const fetchVentures = async () => {
       price: price?.trim(),
       status: status?.trim(),
       whatsappNumber: whatsappNumber?.trim(),
+
+      // 🖼️ Card thumbnail
       image: image?.trim(),
 
-      // 🔥 THIS is the magic
+      // 📸 Gallery images (pipe-separated in Sheets)
+      images: gallery
+        ? gallery
+            .split("|")
+            .map((img) => img.trim())
+            .filter(Boolean)
+        : [],
+
+      // 🗺️ Layout image
+      layout: layout?.trim(),
+
+      // ⭐ Highlights (THIS powers the modal bullets)
       highlights: [
         highlight1?.trim(),
         highlight2?.trim(),
